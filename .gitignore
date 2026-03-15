@@ -1,0 +1,9 @@
+.vscode
+Build
+a.out
+out.cpp
+
+TestsBuild
+
+.mypy_cache
+.cache

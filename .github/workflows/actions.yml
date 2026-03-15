@@ -1,0 +1,53 @@
+name: CI
+on:
+  pull_request:
+  push:
+    branches: [ master ]
+jobs:
+  tests:
+    name: ${{ matrix.os }} (${{ matrix.arch }})
+    strategy:
+      matrix:
+        os: ['Linux']
+        arch: ['x86_64']
+        runner_labels: ['ubuntu-24.04']
+
+        include:
+          - os: 'Linux'
+            arch: 'arm64'
+            runner_labels: '["ubuntu-24.04-arm"]'
+          - os: 'macOS'
+            arch: 'arm64'
+            runner_labels: '["macos-15"]'
+
+    runs-on: ${{ matrix.runner_labels }}
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install dependencies
+        if: ${{ matrix.os == 'Linux' }}
+        run: |
+          sudo apt update
+          sudo apt purge -y llvm-16 llvm-17 llvm-18 gcc-13 g++-13
+          sudo apt install -y gcc-14 g++-14 cmake ninja-build python3
+          wget https://apt.llvm.org/llvm.sh
+          chmod +x llvm.sh
+          sudo ./llvm.sh 21
+      - name: Install dependencies
+        if: ${{ matrix.os == 'macOS' }}
+        run: |
+            brew update
+            brew install llvm@21 ninja
+      - name: Build the compiler
+        run: |
+          mkdir Build
+          cd Build
+          cmake .. -GNinja
+          ninja
+      - name: Run tests
+        run: |
+          python3 test.py
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: artifacts-${{ matrix.arch }}
+          path: build/Neon

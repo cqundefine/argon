@@ -1,0 +1,6 @@
+function main() -> int32
+{
+    let a: int32 = 1;
+    let b: int32 = 2;
+    return a + b;
+}

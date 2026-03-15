@@ -1,0 +1,20 @@
+UseTab: Never
+IndentWidth: 4
+LineEnding: LF
+InsertNewlineAtEOF: true
+ColumnLimit: 0
+
+BasedOnStyle: WebKit
+QualifierAlignment: Left
+IndentCaseLabels: true
+IndentPPDirectives: BeforeHash
+NamespaceIndentation: All
+
+BreakBeforeBraces: Custom
+BraceWrapping:
+    AfterClass: true
+    AfterEnum: true
+    AfterFunction: true
+    AfterStruct: true
+    AfterUnion: true
+    BeforeLambdaBody: false
